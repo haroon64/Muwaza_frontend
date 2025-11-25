@@ -89,7 +89,7 @@ export default function Home() {
 
 
   useEffect(() => {
-    const fetchIcons = async () => {
+    const fetchServices = async () => {
       try {
         const response = await axios.get(
           "http://127.0.0.1:3300/api/v1/services/service_icons"
@@ -110,7 +110,7 @@ export default function Home() {
       }
     };
 
-    fetchIcons();
+    fetchServices();
   }, []);
 
 
@@ -243,20 +243,7 @@ export default function Home() {
             Find the right experts for your needs or showcase your skills to
             reach thousands of customers. All in one platform.
           </p>
-          <div className="flex gap-4">
-            <Link
-              href="/auth/signup?role=customer"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-md transition-all"
-            >
-              I’m a Customer
-            </Link>
-            <Link
-              href="/auth/signup?role=vendor"
-              className="border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-6 py-3 rounded-xl shadow-md transition-all"
-            >
-              I’m a Service Provider
-            </Link>
-          </div>
+         
         </motion.div>
 
        <motion.div
@@ -292,8 +279,7 @@ export default function Home() {
             
 
        <ServiceIcons service_icons={icon} />
-    
-   
+
        </div>
           ))}
 

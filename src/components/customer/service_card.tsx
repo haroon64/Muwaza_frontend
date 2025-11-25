@@ -3,7 +3,7 @@ import { FC } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { Tag, ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { Tag, MapPin, ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { useState, useEffect, useCallback, useRef } from "react";
 
 
@@ -14,6 +14,8 @@ interface Service {
   description: string;
   price: number;
   rating: number;
+  price_bargain: string;
+  city_name: string;
   image: string;
 }
 
@@ -27,6 +29,7 @@ const ServiceCard: FC<ServiceCardProps> = ({ service }) => {
   const [isPaused, setIsPaused] = useState(false);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
+  // console.log("Service in ServiceCard:", service);
 
   // Star rating component
   const StarRating = ({ rating }: { rating: number }) => {
@@ -56,6 +59,7 @@ const ServiceCard: FC<ServiceCardProps> = ({ service }) => {
             <motion.div
             whileHover={{ y: -8 }}
             transition={{ duration: 0.3 }}
+            style={{width:"auto"}}
             className="group bg-white border border-gray-200 rounded-xl shadow-md hover:shadow-2xl overflow-hidden h-full"
             >
             <Link href={`/services/${service.id}`} className="block">
@@ -65,6 +69,7 @@ const ServiceCard: FC<ServiceCardProps> = ({ service }) => {
                     src={service.image}
                     alt={service.name}
                     fill
+                    unoptimized
                     className="object-cover group-hover:scale-110 transition-transform duration-700"
                 />
                 </div>
@@ -80,6 +85,12 @@ const ServiceCard: FC<ServiceCardProps> = ({ service }) => {
                     {service.description}
                     </p>
                 </div>
+                   <div className="flex items-center mb-3">
+                    < MapPin  className="text-blue-600"  />
+                    <span className="ml-2 text-xs sm:text-sm text-gray-600 font-medium">
+                    {service.city_name}
+                    </span>
+                </div>
                 
                 {/* Rating */}
                 <div className="flex items-center mb-3">
@@ -90,24 +101,24 @@ const ServiceCard: FC<ServiceCardProps> = ({ service }) => {
                 </div>
 
                 {/* Price & CTA */}
-                <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                    <div className="flex items-center gap-1">
+                <div  className="flex items-center justify-between pt-3 border-t border-gray-100">
+                    <div  className="flex items-center gap-1">
                     <span className="text-blue-600 font-bold text-lg sm:text-xl">
                         Rs {service.price.toLocaleString()}
                     </span>
-                    <Tag size={16} className="text-green-500" />
-                    <span className="text-green-600 text-xs font-medium">fixed</span>
+                    <Tag style={{marginLeft:"10px"}} size={23} className="text-green-500" />
+                    <span className="text-green-600 text-xs font-medium">{service.price_bargain}</span>
                     </div>
 
-                    <button 
+                    {/* <button 
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium"
                     onClick={(e) => {
                         e.preventDefault();
-                        console.log(`Booking ${service.name}`);
+                        // console.log(`Booking ${service.name}`);
                     }}
                     >
                     Book Now
-                    </button>
+                    </button> */}
                 </div>
                 </div>
             </Link>

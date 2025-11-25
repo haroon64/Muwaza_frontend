@@ -12,21 +12,29 @@ import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
-import { useRouter } from 'next/navigation';
+import { useRouter,usePathname } from 'next/navigation';
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const router = useRouter();
+    const pathname = usePathname();
  
 
  
    const handleLogout = () => {
-    localStorage.clear();
+     localStorage.removeItem("token");
+    localStorage.removeItem("full_name");
+     window.dispatchEvent(new Event("authStateChanged"));
     
-    // router.push("/login");
-  };
+      if (pathname === "/") {
+        console.log("Refreshing home page after logout");
+      router.refresh();
+    } else {
+      router.push("/");
+      
 
+  }};
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -54,7 +62,7 @@ export default function AccountMenu() {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+            <Avatar sx={{ width: 50, height: 50 }}></Avatar>
           </IconButton>
         </Tooltip>
       </Box>
@@ -96,9 +104,9 @@ export default function AccountMenu() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={() => navigateTo('/profile')}>
+        {/* <MenuItem onClick={() => navigateTo('/settings')}>
           <Avatar /> Profile
-        </MenuItem>
+        </MenuItem> */}
 
         <Divider />
 

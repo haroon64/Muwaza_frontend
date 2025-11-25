@@ -9,7 +9,8 @@ import {
 import axios from 'axios';
 import {useAuth} from '@/hooks/useauth'
 import { number } from 'framer-motion';
-
+import { notificationService } from "@/service/NotificationService";
+import { useRouter } from 'next/router';
 interface LocationSuggestion {
   display_name: string;
   lat: string;
@@ -28,13 +29,16 @@ interface CustomerForm {
 
 const CustomerProfileSettings = () => {
   const user = useAuth(); // { user_id }
+  const router = useRouter();
   console.log("User from hook:", user?.user_id);
 
+  
 
   const [isEditing, setIsEditing] = useState(false);
   const [creatingProfile, setCreatingProfile] = useState<boolean | null>(null);
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [userId, setUserId] = useState<number | undefined>(undefined);
+  const [name,setName]= useState<string | null>(null);
 
 
 
@@ -76,6 +80,9 @@ useEffect(() => {
     const checkProfile = async () => {
       try {
         const token = localStorage.getItem("token");
+        const full_name= localStorage.getItem("full_name");
+        setName(full_name);
+      
 
         const res = await fetch(
           `http://127.0.0.1:3300/api/v1/customer/customer_profiles/${userId}`,
@@ -119,6 +126,7 @@ useEffect(() => {
           user_id: userId,
         }));
       } catch (error) {
+         notificationService.notify({ message: error, type:  "error" });
         console.error("Profile check error:", error);
       }
     };
@@ -203,7 +211,7 @@ useEffect(() => {
     const response = await fetch(
       "http://127.0.0.1:3300/api/v1/customer/customer_profiles",
       {
-        method: "POST",
+        method: "PATCH",
         headers: {
           Authorization: `Bearer ${token}`, // keep auth header
           // Do NOT set 'Content-Type'; browser will handle it for FormData
@@ -216,6 +224,8 @@ useEffect(() => {
 
     if (!response.ok) {
       console.error("Server responded with error:", data);
+      notificationService.notify({ message: response.statusText || "Failed to create profile", type:  "error" });
+      
     } else {
       console.log("PROFILE CREATED:", data);
       setIsEditing(true);
@@ -262,8 +272,8 @@ useEffect(() => {
         </div>
 
         <div className="flex-1">
-          <h2 className="text-3xl font-bold mb-1">John Doe</h2>
-          <p className="text-blue-100 mb-3">Premium Member</p>
+          <h2 className="text-3xl font-bold mb-1">{name}</h2>
+          {/* <p className="text-blue-100 mb-3">Premium Member</p> */}
         </div>
 
         {loadingProfile ? (
@@ -284,15 +294,16 @@ useEffect(() => {
           className="bg-white text-blue-600 px-6 py-3 rounded-full font-semibold hover:shadow-2xl transition-all hover:scale-105 flex items-center gap-2"
         >
           <Edit2 className="w-4 h-4" />
-          {isEditing && !creatingProfile ? "Save Changes" : "Edit Profile"}
+          {isEditing && creatingProfile ? "Save Changes" : "Edit Profile"}
         </button>
+        
       )}
 
       </div>
     </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border border-gray-100 group">
+        {/* <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border border-gray-100 group">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
               <Mail className="w-6 h-6 text-blue-600" />
@@ -306,7 +317,7 @@ useEffect(() => {
             </div>
           </div>
           
-        </div>
+        </div> */}
 
         <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border border-gray-100 group">
           <div className="flex items-center gap-3 mb-4">
@@ -385,7 +396,7 @@ useEffect(() => {
                   <div
               key={i}
               onClick={() => selectAddress(s)}
-              className="p-2 hover:bg-gray-100 cursor-pointer"
+              className="p-2 hover:bg-gray-100 text-gray-900 w-full cursor-pointer"
             >
               {s.display_name}
             </div>
@@ -406,7 +417,6 @@ useEffect(() => {
          
         </div>
       </div>
-
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {[

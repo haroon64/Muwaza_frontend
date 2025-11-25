@@ -10,12 +10,14 @@ import CustomerProfileSettings from "@/components/customer/customer_profile_sett
 import PaymentMethodsSettings from "@/components/customer/payment_methods_settings"
 import VendorProfileSettings from "@/components/vendor/Vender_profile_settings"
 
+import { notificationService } from "@/service/NotificationService";
+
 const settingsTabs = [
-  { id: "customer", label: "Customer Profile", icon: User, color: "blue", gradient: "from-blue-500 to-cyan-500" },
-  { id: "payment", label: "Payment Methods", icon: CreditCard, color: "green", gradient: "from-green-500 to-emerald-500" },
-  { id: "help", label: "Help Center", icon: HelpCircle, color: "yellow", gradient: "from-yellow-500 to-orange-500" },
-  { id: "privacy", label: "Privacy & Policy", icon: Shield, color: "red", gradient: "from-red-500 to-pink-500" },
-  { id: "vendor", label: "Vendor Profile", icon: Briefcase, color: "purple", gradient: "from-purple-500 to-indigo-500" },
+  { id: "customer", label: "Customer Profile", icon: User, color: "#02bba8", gradient: "from-blue-500 to-cyan-500" },
+  { id: "payment", label: "Payment Methods", icon: CreditCard, color: "#02bba8", gradient: "from-green-500 to-emerald-500" },
+  { id: "help", label: "Help Center", icon: HelpCircle, color: "#02bba8", gradient: "from-yellow-500 to-orange-500" },
+  { id: "privacy", label: "Privacy & Policy", icon: Shield, color: "#02bba8", gradient: "from-red-500 to-pink-500" },
+  { id: "vendor", label: "Vendor Profile", icon: Briefcase, color: "#02bba8", gradient: "from-purple-500 to-indigo-500" },
 ];
 
 export default function SettingsPage() {
