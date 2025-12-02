@@ -70,9 +70,7 @@ const CustomerProfileSettings = () => {
     }
   }, [user?.user_id]);
 
-  // ----------------------------------------------------
-  // Fetch if profile exists
-  // ----------------------------------------------------
+ 
   useEffect(() => {
    
     if (!user?.user_id) return;
@@ -130,9 +128,7 @@ const CustomerProfileSettings = () => {
     checkProfile();
   }, [userId, created,updated]);
 
-  // ----------------------------------------------------
-  // Validation Function
-  // ----------------------------------------------------
+ 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
@@ -330,9 +326,7 @@ const CustomerProfileSettings = () => {
     }
   };
 
-  // ----------------------------------------------------
-  // Update Profile Function
-  // ----------------------------------------------------
+ 
   const handleUpdateProfile = async () => {
     // Validate form before submission
     if (!validateForm()) {

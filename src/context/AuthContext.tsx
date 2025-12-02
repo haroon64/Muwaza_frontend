@@ -7,7 +7,7 @@ interface UserType {
   name?: string;
   email?: string;
   role?:string;
-  // add more fields if needed
+
 }
 
 interface AuthContextType {

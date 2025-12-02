@@ -3,9 +3,6 @@ import { jwtDecode } from "jwt-decode";
 
 interface DecodedToken {
   user_id: number;
-     // user id
-
-
   exp: number;
 }
 
@@ -26,9 +23,12 @@ export const useAuth = () => {
       // optional: check expiration
       if (decoded.exp * 1000 < Date.now()) {
         console.log("Token expired");
+        localStorage.removeItem("full_name")
+        localStorage.removeItem("token")
         setUser(null);
         return;
       }
+      console.log("hit-decoded")
 
       setUser(decoded);
 

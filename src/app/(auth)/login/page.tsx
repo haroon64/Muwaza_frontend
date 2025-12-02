@@ -40,7 +40,7 @@ export default function LoginPage() {
       setLoading(false);
       return;
     }
-
+    
     try {
       const response = await axios.post(
         "http://127.0.0.1:3300/api/v1/signin",

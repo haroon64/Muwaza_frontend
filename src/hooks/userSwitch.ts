@@ -3,9 +3,10 @@ import { useUserProfiles } from "@/context/UserProfileContext";
 
 export function UseSwitch() {
   const { user, setUser } = useAuth();
-   const { reloadProfiles } = useUserProfiles();
+  const { reloadProfiles } = useUserProfiles();
 
   const switchMode = async (role: "customer" | "vendor") => {
+
     try {
       const token = localStorage.getItem("token");
 
@@ -31,6 +32,7 @@ export function UseSwitch() {
 
       // Rails returns: { status: "success", user: {...} }
       setUser(data.user);
+      localStorage.setItem("user", JSON.stringify(data.user));
     reloadProfiles();
 
       return { success: true };

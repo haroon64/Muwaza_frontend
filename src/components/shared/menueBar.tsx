@@ -33,6 +33,7 @@ export default function AccountMenu() {
   }, []);
 
   const handleMode = (role: any) => {
+    console.log("handle mode hit ===", role);
     if (role === "vendor") {
       switchMode("customer");
     } else {
@@ -50,6 +51,14 @@ export default function AccountMenu() {
       router.refresh();
     } else {
       router.push("/");
+    }
+  };
+
+  const handleSettingsClicked = (role: any) => {
+    if (role === "vendor") {
+      router.push("/settings/vendor-profile");
+    } else {
+      router.push("/settings/customer-profile");
     }
   };
 
@@ -141,7 +150,7 @@ export default function AccountMenu() {
 
         <Divider />
 
-        <MenuItem onClick={() => navigateTo("/settings")}>
+        <MenuItem onClick={() => handleSettingsClicked(user?.role)}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>

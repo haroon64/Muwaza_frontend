@@ -30,7 +30,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/hooks/useauth";
 import HandymanIcon from "@mui/icons-material/Handyman";
-import ServiceForm from "@/components/vendor/addService";
+import ServiceForm from "@/components/vendor/addServiceForm";
 import { notificationService } from "@/service/NotificationService";
 
 interface LocationSuggestion {
@@ -77,7 +77,6 @@ const VendorProfileSettings = () => {
   // Mock user data - replace with your actual auth hook
   const user = useAuth();
 
-
   const [activeTab, setActiveTab] = useState<
     "profile" | "portfolio" | "service"
   >("profile");
@@ -92,9 +91,9 @@ const VendorProfileSettings = () => {
   const [profilePreview, setProfilePreview] = useState("");
   const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
   const [suggestions, setSuggestions] = useState<LocationSuggestion[]>([]);
-  const [created ,setCreated] = useState(false);
+  const [created, setCreated] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [updated,setUpdated] = useState(false);
+  const [updated, setUpdated] = useState(false);
 
   // ---------- FORM DATA ----------
   const [vendorForm, setVendorForm] = useState<VendorForm>({
@@ -140,7 +139,6 @@ const VendorProfileSettings = () => {
         );
 
         const data = await res.json();
-
 
         if (data.exists === true) {
           setExists(true);
@@ -190,7 +188,6 @@ const VendorProfileSettings = () => {
             console.log("📦 Loaded portfolios from server:", loadedPortfolios);
             setPortfolioItems(loadedPortfolios);
           }
-            
 
           setProfileImage(null);
         }
@@ -203,14 +200,13 @@ const VendorProfileSettings = () => {
           user_id: userId,
         }));
       } catch (error) {
-        
         notificationService.notify({ message: error, type: "error" });
         setLoadingProfile(false);
       }
     };
 
     checkProfile();
-  }, [userId,created,updated]);
+  }, [userId, created, updated]);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -250,17 +246,12 @@ const VendorProfileSettings = () => {
     } else if (vendorForm.address.trim().length < 5) {
       newErrors.address = "Please enter a complete address";
     }
-    // Latitude and Longitude validation (should be set when address is selected)
-    // if (!vendorForm.latitude || !vendorForm.longitude) {
-    //   newErrors.address = "Please select an address from the dropdown suggestions";
-    // }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  useEffect(() => {
-   
-  }, [vendorForm]);
+  useEffect(() => {}, [vendorForm]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
@@ -302,21 +293,21 @@ const VendorProfileSettings = () => {
     reader.readAsDataURL(file);
   };
   const addPortfolioItem = () => {
-  const newItem: PortfolioItem = {
-    experience: "",
-    existingImages: [],
-    newImages: [],
-    newImagePreviews: []
+    const newItem: PortfolioItem = {
+      experience: "",
+      existingImages: [],
+      newImages: [],
+      newImagePreviews: [],
+    };
+
+    setPortfolioItems((prev) => {
+      console.log("➕ Adding portfolio item. Current:", prev.length);
+      return [...prev, newItem];
+    });
   };
-  
-  setPortfolioItems(prev => {
-    console.log("➕ Adding portfolio item. Current:", prev.length);
-    return [...prev, newItem];
-  });
-};
 
   const removePortfolioItem = (index: number) => {
-     console.log(`🗑️ Removing portfolio at index ${index}`);
+    console.log(`🗑️ Removing portfolio at index ${index}`);
     setPortfolioItems((prev) => prev.filter((_, i) => i !== index));
   };
 
@@ -334,13 +325,15 @@ const VendorProfileSettings = () => {
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (!e.target.files || e.target.files.length === 0) {
-          console.log("❌ No files selected");
-      return};
+      console.log(" No files selected");
+      return;
+    }
 
     const files = Array.from(e.target.files);
-     const fileArray = Array.from(files);
-  console.log(`📸 Processing ${fileArray.length} images for portfolio ${index}`);
-
+    const fileArray = Array.from(files);
+    console.log(
+      `📸 Processing ${fileArray.length} images for portfolio ${index}`
+    );
 
     // Validate files
     const validFiles: File[] = [];
@@ -489,8 +482,6 @@ const VendorProfileSettings = () => {
         // This depends on your backend API design
       });
 
- 
-
       const response = await fetch(
         `http://127.0.0.1:3300/api/v1/vendor/vendor_profiles/${vendorForm.id}`,
         {
@@ -611,7 +602,7 @@ const VendorProfileSettings = () => {
         });
       });
 
-      console.log("request intiated ------1")
+      console.log("request intiated ------1");
       const response = await fetch(
         "http://127.0.0.1:3300/api/v1/vendor/vendor_profiles",
         {
@@ -631,9 +622,13 @@ const VendorProfileSettings = () => {
         notificationService.notify({ message: data.errors[0], type: "error" });
       } else {
         console.log("PROFILE CREATED:");
-        setCreated(true)
+        setCreated(true);
         setIsEditing(false);
         setCreatingProfile(true);
+        notificationService.notify({
+          message: "Vendor Profile Created !",
+          type: "success",
+        });
       }
     } catch (error) {
       console.error("Create profile error:", error);
@@ -651,14 +646,17 @@ const VendorProfileSettings = () => {
   return (
     <div className="space-y-6 animate-fadeIn">
       {/* Header Card */}
-      <div style={{background: "#3730a3"}} className=" rounded-3xl p-8 text-white shadow-xl relative overflow-hidden">
+      <div
+        style={{ background: "#3730a3" }}
+        className=" rounded-3xl p-8 text-white shadow-xl relative overflow-hidden"
+      >
         <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -mr-32 -mt-32"></div>
         <div className="absolute bottom-0 left-0 w-48 h-48 bg-white opacity-5 rounded-full -ml-24 -mb-24"></div>
 
         <div className="relative flex items-center gap-6">
           <div className="relative">
             <div className="w-24 h-24 rounded-full bg-white p-1 shadow-2xl overflow-hidden">
-               {profilePreview && (
+              {profilePreview && (
                 <img
                   src={profilePreview}
                   alt="Profile"
@@ -707,7 +705,7 @@ const VendorProfileSettings = () => {
           ) : (
             <button
               onClick={(e) => {
-                if (isEditing ) {
+                if (isEditing) {
                   handleEdit(e);
                 } else {
                   setIsEditing(true);
@@ -716,7 +714,7 @@ const VendorProfileSettings = () => {
               className="bg-white text-blue-600 px-6 py-3 rounded-full font-semibold hover:shadow-2xl transition-all hover:scale-105 flex items-center gap-2"
             >
               <Edit2 className="w-4 h-4" />
-              {isEditing  ? "Save Changes" : "Edit Profile"}
+              {isEditing ? "Save Changes" : "Edit Profile"}
             </button>
           )}
         </div>

@@ -18,12 +18,12 @@ export default function Header() {
   const router = useRouter();
   const { reloadProfiles, activeImage } = useUserProfiles();
 
-  useEffect(() => {
-  if (user?.id) {
-    reloadProfiles();
+//   useEffect(() => {
+//   if (user?.id) {
+//     reloadProfiles();
     
-  }
-}, [user]);
+//   }
+// }, [user]);
 
 
 useEffect(() => {
@@ -61,15 +61,15 @@ useEffect(() => {
   }, [setUser]);
 
   // Custom event listener for login/logout within the same window
-  useEffect(() => {
-    const handleAuthChange = () => {
-      const storedUser = localStorage.getItem("user");
-      setUser(storedUser ? JSON.parse(storedUser) : null);
-    };
-    window.addEventListener("authStateChanged", handleAuthChange);
-    return () =>
-      window.removeEventListener("authStateChanged", handleAuthChange);
-  }, [setUser]);
+  // useEffect(() => {
+  //   const handleAuthChange = () => {
+  //     const storedUser = localStorage.getItem("user");
+  //     setUser(storedUser ? JSON.parse(storedUser) : null);
+  //   };
+  //   window.addEventListener("authStateChanged", handleAuthChange);
+  //   return () =>
+  //     window.removeEventListener("authStateChanged", handleAuthChange);
+  // }, [setUser]);
 
   // Handle scroll effect
   useEffect(() => {

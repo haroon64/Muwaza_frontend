@@ -43,12 +43,14 @@ export const UserProfileProvider = ({ children }:{children:ReactNode}) => {
       const vData = vRes.ok ? await vRes.json() : null;
       console.log('------v----',vData)
       setVendorProfile(vData);
-      console.l
-      console.log("--<---->",vData)
-      console.log("-<----->",cData?.profile.profile_image)
+
+      console.log("--<----> VendorProfile",vData)
+      console.log("-<----- CustomerProfile >",cData?.profile.profile_image)
+      console.log("---role---",user.role)
 
       // Set active image based on mode
       if (user.role === "vendor") {
+        
         
         setActiveImage(vData?.profile.profile_image || null);
       } else {

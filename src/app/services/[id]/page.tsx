@@ -295,9 +295,9 @@ const ServiceDetailPage = () => {
                 {isLoggedIn ? (
                   <button
                     onClick={handleCopyPhone}
-                    className="w-full flex items-center justify-between gap-3 bg-white hover:bg-indigo-50 rounded-xl p-4 transition-all border-2 border-transparent hover:border-indigo-200 group"
+                    className="w-full flex cursor-pointer items-center justify-between gap-3 bg-white hover:bg-indigo-50 rounded-xl p-4 transition-all border-2 border-transparent hover:border-indigo-200 group"
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex  items-center gap-3">
                       <div className="bg-indigo-100 group-hover:bg-indigo-200 p-2 rounded-lg transition">
                         <Phone size={20} className="text-indigo-600" />
                       </div>
@@ -311,7 +311,7 @@ const ServiceDetailPage = () => {
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex  items-center gap-2">
                       {copied ? (
                         <>
                           <CheckCircle size={20} className="text-green-600" />
@@ -341,7 +341,7 @@ const ServiceDetailPage = () => {
                     //   message: "Please login to view the phone number",
                     //   type: "error",
                     // })}
-                    className="w-full flex items-center justify-between gap-3 bg-white hover:bg-indigo-50 rounded-xl p-4 transition-all border border-indigo-200 group"
+                    className="w-full cursor-pointer flex items-center justify-between gap-3 bg-white hover:bg-indigo-50 rounded-xl p-4 transition-all border border-indigo-200 group"
                   >
                     <div className="flex items-center gap-3">
                       <div className="bg-indigo-100 group-hover:bg-indigo-200 p-2 rounded-lg transition">
