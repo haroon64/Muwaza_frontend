@@ -7,34 +7,26 @@ import { usePathname, useRouter } from "next/navigation";
 import { Menu, X, Settings, LogOut, Home, Briefcase, Info } from "lucide-react";
 import AccountMenu from "@/components/shared/menueBar";
 import { useAuth } from "@/context/AuthContext";
-import {userSwitch} from "@/hooks/userSwitch"
-import { useUserProfiles } from "@/context/UserProfileContext";
+import { userSwitch } from "@/hooks/userSwitch";
+import { useSpinner } from "@/context/SpinnerContext";
+
+
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, setUser, isLoggedIn } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [scrolled, setScrolled] = useState(false);
+  const [role, setRole] = useState("");
   const pathname = usePathname();
   const router = useRouter();
-  const { reloadProfiles, activeImage } = useUserProfiles();
 
-//   useEffect(() => {
-//   if (user?.id) {
-//     reloadProfiles();
-    
-//   }
-// }, [user]);
-
-
-useEffect(() => {
-
-   console.log("active}++++==",activeImage)
-    
-
-}, [activeImage]);
-
-
- 
+  useEffect(() => {
+    if (user?.role) {
+      setRole(user.role);
+    } else {
+      setRole("");
+    }
+  }, [user]);
 
   // Initialize user from localStorage on mount
   useEffect(() => {
@@ -53,23 +45,13 @@ useEffect(() => {
         setUser(updatedUser);
       }
       if (e.key === "token" && !e.newValue) {
+        console.log("executed==========");
         setUser(null);
       }
     };
     window.addEventListener("storage", handleStorageChange);
     return () => window.removeEventListener("storage", handleStorageChange);
   }, [setUser]);
-
-  // Custom event listener for login/logout within the same window
-  // useEffect(() => {
-  //   const handleAuthChange = () => {
-  //     const storedUser = localStorage.getItem("user");
-  //     setUser(storedUser ? JSON.parse(storedUser) : null);
-  //   };
-  //   window.addEventListener("authStateChanged", handleAuthChange);
-  //   return () =>
-  //     window.removeEventListener("authStateChanged", handleAuthChange);
-  // }, [setUser]);
 
   // Handle scroll effect
   useEffect(() => {
@@ -83,14 +65,24 @@ useEffect(() => {
     localStorage.removeItem("user");
     setUser(null);
     setMenuOpen(false);
-    if (pathname !== "/") router.push("/");
+    if (pathname !== "/") router.spush("/");
   };
 
   const navLinks = [
     { name: "Home", href: "/", icon: Home },
-    { name: "Services", href: "/services", icon: Briefcase },
+    { name: "Services", href: "/services", icon: Briefcase, role: "customer" },
+    {
+      name: "my_services",
+      href: "/my-services",
+      icon: Briefcase,
+      role: "vendor",
+    },
     { name: "About Us", href: "/about", icon: Info },
   ];
+
+  const filteredLinks = navLinks.filter(
+    (link) => !link.role || link.role === role
+  );
 
   if (isLoading) {
     return (
@@ -134,9 +126,10 @@ useEffect(() => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-1">
-            {navLinks.map((link) => {
+            {filteredLinks.map((link) => {
               const Icon = link.icon;
               const isActive = pathname === link.href;
+
               return (
                 <Link
                   key={link.name}
